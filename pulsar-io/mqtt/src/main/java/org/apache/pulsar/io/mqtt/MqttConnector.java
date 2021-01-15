@@ -43,10 +43,7 @@ public class MqttConnector implements MqttCallback {
     private final LinkedList<IMqttMessageHandler> handlers = new LinkedList<>();
 
 
-
-
     private MqttClient mqttClient;
-    private MqttSourceConfig mqttSourceConfig;
     private static final Logger LOG = LoggerFactory.getLogger(MqttConnector.class);
     public MqttConnector(MqttSourceConfig mqttSourceConfig) {
         mqttTopic = mqttSourceConfig.getTopic();
@@ -139,7 +136,7 @@ public class MqttConnector implements MqttCallback {
 
     public void closeMqttConnection() {
         if (mqttClient == null) {
-            LOG.warn("Cannot close mqtt connection since it's null");
+            LOG.warn("Cannot close MQTT connection since it's null");
             return;
         }
         try {

@@ -68,6 +68,7 @@
         <module>influxdb</module>
         <module>dynamodb</module>
         <module>nsq</module>
+        <module>mqtt</module>
       </modules>
     </profile>
 

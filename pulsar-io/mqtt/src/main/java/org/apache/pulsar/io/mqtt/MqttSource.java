@@ -48,7 +48,7 @@ public class MqttSource extends PushSource<byte[]> {
     private String driverId;
     @Override
     public void open(Map<String, Object> config, SourceContext sourceContext) throws Exception {
-        LOG.info("opening mqtt source connection");
+        LOG.info("Loading Mqtt source config mqtt source connection");
         mqttSourceConfig = MqttSourceConfig.load(config);
         mqttSourceConfig.validate();
         this.driverId = mqttSourceConfig.getDriverId();
@@ -56,7 +56,7 @@ public class MqttSource extends PushSource<byte[]> {
         MessageProcessor processor = new MessageProcessor(mqttConnector, this,sourceContext,mqttSourceConfig);
 
         mqttConnector.subscribe(processor);
-        LOG.info("adding subscriber is done");
+        LOG.info("Adding subscriber is done for requested driver_id ["+this.driverId+"]");
 
         this.start();
         running = true;
@@ -67,13 +67,10 @@ public class MqttSource extends PushSource<byte[]> {
             LOG.info("Starting mqtt source connector thread");
             try {
                 mqttConnector.connect();
-
-
             } catch (Exception e) {
-
                 e.printStackTrace();
             }
-            LOG.info("mqtt source started.");
+            LOG.info("mqtt source is successfully connected");
 
             while (running) {
                 try {
@@ -85,7 +82,7 @@ public class MqttSource extends PushSource<byte[]> {
             }
         });
         runnerThread.setUncaughtExceptionHandler((t, e) -> LOG.error("[{}] Error while consuming records", t.getName(), e));
-        runnerThread.setName("mqtt Source Thread");
+        runnerThread.setName("MQTT Source Thread");
         runnerThread.start();
     }
 

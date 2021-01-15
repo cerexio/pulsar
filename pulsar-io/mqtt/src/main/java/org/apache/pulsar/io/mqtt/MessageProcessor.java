@@ -89,24 +89,17 @@ private static final Logger LOG = LoggerFactory.getLogger(MessageProcessor.class
             // Using a single producer however should guarantee insertion-order guarantee between two consecutive messages.
 
             // Current implementation uses the latter approach
-
-
-
-            long now = System.currentTimeMillis();
-
             byte[] payload = message.getPayload();
 
-            LOG.info("received the message : {}", message.toString());
+            LOG.info("Received message from MQTT source : {}", message.toString());
 
             if (payload != null) {
-                LOG.info("received the message  in bytes : {}", payload);
+                LOG.info("Received the message  in bytes : {}", payload);
                 source.consume(new MqttRecord(Optional.ofNullable(topic), payload));
                 ++mqttReceiveMsgCount;
                 sourceContext.recordMetric(METRICS_MQTT_TOTAL_INCOMING,mqttReceiveMsgCount );
                 mqttReceiveMsgSize +=payload.length;
                 sourceContext.recordMetric(METRICS_MQTT_TOTAL_INCOMING_BYTES,mqttReceiveMsgSize );
-
-
             }
             else {
                 log.warn("Cannot forward Message to Pulsar because (mapped) content is null");
@@ -124,7 +117,7 @@ private static final Logger LOG = LoggerFactory.getLogger(MessageProcessor.class
 
     @Override
     public void connectionLost(Throwable cause) {
-        log.info("Mqtt connection lost");
+        log.info("MQTT connection lost");
         close(false);
     }
 
@@ -148,7 +141,7 @@ private static final Logger LOG = LoggerFactory.getLogger(MessageProcessor.class
         if (connector != null) {
             boolean mqttConnected = connector.isMqttConnected();
             if (mqttConnected == false) {
-                log.error("Health check: mqtt is not connected");
+                log.error("Health check: MQTT is not connected");
             }
             return mqttConnected;
         }
